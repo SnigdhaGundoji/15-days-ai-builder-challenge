@@ -23,8 +23,12 @@ st.write("Paste your text below and get a summary.")
 user_text = st.text_area(
     "Enter long text:",
     height=250
-    word_count = len(user_text.split())
+    
 )
+# Word Counter
+word_count = len(user_text.split())
+
+st.write("Word Count:", word_count)
 
 # Summary type
 summary_type = st.selectbox(
