@@ -6,24 +6,43 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Get API key
 API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-# Page config
+# Page configuration
 st.set_page_config(
     page_title="AI Grammar Improver",
-    page_icon="✍️"
+    page_icon="✍️",
+    layout="centered"
 )
 
-# Title
+# Sidebar
+st.sidebar.title("✍️ AI Grammar Improver")
+
+st.sidebar.write("Built by Snigdha")
+
+st.sidebar.write("Improve your English using AI")
+
+# Main title
 st.title("✍️ AI Grammar & English Improver")
 
-st.write("Improve your English using AI.")
+st.write("Improve your grammar, fluency, and communication using AI.")
 
 # User input
 user_text = st.text_area(
     "Enter your sentence or paragraph:",
     height=200
 )
+
+# Word Counter
+word_count = len(user_text.split())
+
+st.write("Word Count:", word_count)
+
+# Character Counter
+char_count = len(user_text)
+
+st.write("Character Count:", char_count)
 
 # Improvement type
 improvement_type = st.selectbox(
@@ -36,9 +55,14 @@ improvement_type = st.selectbox(
     ]
 )
 
-# Button
+# Example text button
+if st.button("Use Example Text"):
+    user_text = "i wants improve my communication skill"
+
+# Improve button
 if st.button("Improve Text"):
 
+    # Check if text exists
     if user_text:
 
         with st.spinner("Improving your English..."):
@@ -72,7 +96,7 @@ if st.button("Improve Text"):
                     {
                         "role": "system",
                         "content": (
-                            "You are an expert English teacher "
+                            "You are a professional English teacher "
                             "and grammar correction assistant."
                         )
                     },
@@ -83,24 +107,35 @@ if st.button("Improve Text"):
                 ]
             }
 
-            # API request
+            # Send API request
             response = requests.post(
                 url,
                 headers=headers,
                 json=data
             )
 
+            # Convert response to JSON
             result = response.json()
 
             try:
 
+                # Extract AI response
                 ai_response = result["choices"][0]["message"]["content"]
 
-                st.subheader("Improved Text")
+                # Display heading
+                st.subheader("✨ Improved English")
 
-                st.success(ai_response)
+                # Display response
+                st.write(ai_response)
+
+                # Expandable section
+                with st.expander("See Full Response"):
+
+                    # Copy-style output
+                    st.code(ai_response)
 
             except:
 
                 st.error("Error improving text")
+
                 st.write(result)
